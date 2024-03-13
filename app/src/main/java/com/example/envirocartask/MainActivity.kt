@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         textView = view.findViewById(R.id.textId)
         btn = view.findViewById(R.id.getBtn)
-        
+
         mapRetrofit = MapRetrofit()
         mapRetrofit.setup()
 

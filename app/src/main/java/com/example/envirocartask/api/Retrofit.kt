@@ -31,7 +31,7 @@ class MapRetrofit {
     }
 
     fun getTracks(textView:TextView) {
-        var tracks = retrofitBuilder.getTracks("sanjaygs07", "sanjay123")
+        var tracks = retrofitBuilder.getTracks()
         tracks.enqueue(object : Callback<Tracks?> {
             override fun onResponse(
                 call: Call<Tracks?>,
