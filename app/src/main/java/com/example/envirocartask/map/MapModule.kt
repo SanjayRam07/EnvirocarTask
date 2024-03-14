@@ -8,8 +8,8 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.MapView
 
 class MapModule(private val view: View) {
-    private lateinit var mMap: MapView
-    private lateinit var controller: IMapController
+    lateinit var mMap: MapView
+    lateinit var controller: IMapController
 
     fun init() {
 

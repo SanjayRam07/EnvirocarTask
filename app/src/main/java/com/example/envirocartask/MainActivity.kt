@@ -12,6 +12,8 @@ import com.example.envirocar.api.ApiInterface
 import com.example.envirocar.api.MapRetrofit
 import com.example.envirocar.models.Tracks
 import com.example.envirocartask.map.MapModule
+import com.example.envirocartask.map.TrackTrace
+import com.example.envirocartask.models.Feature
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.osmdroid.config.Configuration
@@ -28,9 +30,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mapRetrofit: MapRetrofit
 
     private lateinit var textView: TextView
-    private lateinit var btn: Button
+    private lateinit var btn1: Button
+    private lateinit var btn2: Button
     private lateinit var view: View
     private lateinit var mapView: MapModule
+    private lateinit var trackTrace: TrackTrace
+
+    private lateinit var tracks: Unit
+    private lateinit var features: List<Feature>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +48,8 @@ class MainActivity : AppCompatActivity() {
         Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID;
 
         textView = view.findViewById(R.id.textId)
-        btn = view.findViewById(R.id.getBtn)
+        btn1 = view.findViewById(R.id.getBtn1)
+        btn2 = view.findViewById(R.id.getBtn2)
 
         mapRetrofit = MapRetrofit()
         mapRetrofit.setup()
@@ -54,8 +62,12 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        btn.setOnClickListener {
-            var tracks = mapRetrofit.getTracks(textView)
+        btn1.setOnClickListener {
+            tracks = mapRetrofit.getTracks(textView)
+        }
+
+        btn2.setOnClickListener {
+            mapRetrofit.getTrackTrace(mapView.mMap)
         }
     }
 

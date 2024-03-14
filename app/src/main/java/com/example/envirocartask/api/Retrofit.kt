@@ -3,14 +3,19 @@ package com.example.envirocar.api
 import android.util.Log
 import android.widget.TextView
 import com.example.envirocar.models.Tracks
+import com.example.envirocartask.map.TrackTrace
+import com.example.envirocartask.models.Feature
+import com.example.envirocartask.models.TrackPoints
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.converter.gson.GsonConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Polyline
 import retrofit2.Retrofit
-
 class MapRetrofit {
     public lateinit var retrofitBuilder: ApiInterface
 
@@ -40,7 +45,7 @@ class MapRetrofit {
                 if (response.isSuccessful) {
                     val datas = response.body()!!
                     val tracks = datas.tracks
-                    if (tracks.isNotEmpty() && tracks != null) {
+                    if (tracks.isNotEmpty()) {
                         textView.text = tracks[0].id
                     }
                 }
@@ -48,7 +53,46 @@ class MapRetrofit {
 
             override fun onFailure(call: Call<Tracks?>, t: Throwable) {
                 textView.text = t.message.toString()
-                Log.e("NWissue", t.message.toString())
+                Log.e("NWissue", t.message.toString(), t)
+            }
+        })
+    }
+
+    fun getTrackTrace(mapView: MapView) {
+        Log.e("inside fun2", "good")
+        var trackTrace = retrofitBuilder.getTrack()
+        val result: List<Feature>
+
+        var polyline: Polyline = Polyline()
+        var points: ArrayList<GeoPoint> = ArrayList()
+
+        trackTrace.enqueue(object : Callback<TrackPoints?> {
+            override fun onResponse(
+                call: Call<TrackPoints?>,
+                response: Response<TrackPoints?>
+            ) {
+                Log.e("inside fun2", "super")
+                if(response.isSuccessful) {
+                    val datas = response.body()!!
+                    val features = datas.features
+                    if(features.isNotEmpty()) {
+                        Log.e("inside fun2", "great")
+                        for(feature in features) {
+                            val point: ArrayList<Double> = ArrayList(feature.geometry.coordinates)
+                            points.add(GeoPoint(point[0], point[1]))
+                        }
+                        polyline.setPoints(points)
+
+                        Log.e("inside fun2", points.toString())
+
+                        mapView.overlays.add(polyline)
+                        mapView.invalidate()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<TrackPoints?>, t: Throwable) {
+                Log.e("trace track", t.message.toString(), t)
             }
         })
     }
