@@ -12,8 +12,12 @@ import retrofit2.Response
 import retrofit2.converter.gson.GsonConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.osmdroid.api.IGeoPoint
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapController
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.Polyline
 import retrofit2.Retrofit
 class MapRetrofit {
@@ -60,17 +64,17 @@ class MapRetrofit {
 
     fun getTrackTrace(mapView: MapView) {
         Log.e("inside fun2", "good")
-        var trackTrace = retrofitBuilder.getTrack()
-        val result: List<Feature>
 
-        var polyline: Polyline = Polyline()
-        var points: ArrayList<GeoPoint> = ArrayList()
+        var trackTrace = retrofitBuilder.getTrack()
+        var polyline = Polyline()
+        var geoPoints = ArrayList<GeoPoint>()
 
         trackTrace.enqueue(object : Callback<TrackPoints?> {
             override fun onResponse(
                 call: Call<TrackPoints?>,
                 response: Response<TrackPoints?>
             ) {
+
                 Log.e("inside fun2", "super")
                 if(response.isSuccessful) {
                     val datas = response.body()!!
@@ -78,15 +82,13 @@ class MapRetrofit {
                     if(features.isNotEmpty()) {
                         Log.e("inside fun2", "great")
                         for(feature in features) {
-                            val point: ArrayList<Double> = ArrayList(feature.geometry.coordinates)
-                            points.add(GeoPoint(point[0], point[1]))
+                            val point = feature.geometry.coordinates
+                            val geoPoint = GeoPoint(point[0], point[1])
+                            geoPoints.add(geoPoint)
                         }
-                        polyline.setPoints(points)
 
-                        Log.e("inside fun2", points.toString())
-
-                        mapView.overlays.add(polyline)
-                        mapView.invalidate()
+                        polyline.setPoints(geoPoints)
+                        mapView.overlay.add(polyline)
                     }
                 }
             }
