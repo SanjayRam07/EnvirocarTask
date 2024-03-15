@@ -88,7 +88,7 @@ class MapRetrofit {
                         }
 
                         polyline.setPoints(geoPoints)
-                        mapView.overlay.add(polyline)
+                        mapView.overlayManager.add(polyline)
                     }
                 }
             }
