@@ -52,7 +52,8 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
 
         btn1.setOnClickListener {
-            tracks = mapRetrofit.getTracks(textView)
+            val userId = view.findViewById<TextView>(R.id.textId).text.toString()
+            tracks = mapRetrofit.getTracks(textView, userId)
         }
 
         btn2.setOnClickListener {

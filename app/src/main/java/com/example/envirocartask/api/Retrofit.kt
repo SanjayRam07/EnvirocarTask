@@ -38,8 +38,9 @@ class MapRetrofit {
             .create(ApiInterface::class.java)
     }
 
-    fun getTracks(textView:TextView) {
-        var tracks = retrofitBuilder.getTracks()
+    fun getTracks(textView:TextView, userId: String) {
+        var tracks = retrofitBuilder.getTracks(userId)
+
         tracks.enqueue(object : Callback<Tracks?> {
             override fun onResponse(
                 call: Call<Tracks?>,
