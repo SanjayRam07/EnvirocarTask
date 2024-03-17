@@ -1,10 +1,12 @@
 package com.example.envirocar.api
 
+import android.graphics.Color
 import android.util.Log
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.example.envirocar.models.Tracks
-import com.example.envirocartask.map.TrackTrace
-import com.example.envirocartask.models.Feature
+import com.example.envirocartask.MainActivity
+import com.example.envirocartask.R
 import com.example.envirocartask.models.TrackPoints
 import retrofit2.Call
 import retrofit2.Callback
@@ -12,12 +14,9 @@ import retrofit2.Response
 import retrofit2.converter.gson.GsonConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.osmdroid.api.IGeoPoint
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
-import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.Polyline
 import retrofit2.Retrofit
 class MapRetrofit {
@@ -74,21 +73,27 @@ class MapRetrofit {
                 call: Call<TrackPoints?>,
                 response: Response<TrackPoints?>
             ) {
+                lateinit var geoPoint:GeoPoint
 
                 Log.e("inside fun2", "super")
                 if(response.isSuccessful) {
                     val datas = response.body()!!
                     val features = datas.features
+                    Log.e("inside fun2", features.size.toString())
                     if(features.isNotEmpty()) {
                         Log.e("inside fun2", "great")
                         for(feature in features) {
                             val point = feature.geometry.coordinates
-                            val geoPoint = GeoPoint(point[0], point[1])
+                            geoPoint = GeoPoint(point[1], point[0])
                             geoPoints.add(geoPoint)
                         }
 
                         polyline.setPoints(geoPoints)
-                        mapView.overlayManager.add(polyline)
+                        polyline.width=15f
+                        polyline.color=Color.RED
+
+                        mapView.overlays.add(polyline)
+                        mapView.zoomToBoundingBox(polyline.bounds, true)
                     }
                 }
             }
