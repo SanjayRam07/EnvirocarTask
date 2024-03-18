@@ -4,10 +4,13 @@ import android.graphics.Color
 import android.util.Log
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.envirocar.models.Tracks
 import com.example.envirocartask.MainActivity
 import com.example.envirocartask.R
 import com.example.envirocartask.models.TrackPoints
+import com.example.envirocartask.recyclerview.RecyclerAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,8 +41,9 @@ class MapRetrofit {
             .create(ApiInterface::class.java)
     }
 
-    fun getTracks(textView:TextView, userId: String) {
+    fun getTracks(userId: String, RVAdapter: RecyclerView) {
         var tracks = retrofitBuilder.getTracks(userId)
+        var trackList: ArrayList<String> = ArrayList<String>()
 
         tracks.enqueue(object : Callback<Tracks?> {
             override fun onResponse(
@@ -50,13 +54,17 @@ class MapRetrofit {
                     val datas = response.body()!!
                     val tracks = datas.tracks
                     if (tracks.isNotEmpty()) {
-                        textView.text = tracks[0].id
+                        for(track in tracks) {
+                            val id = track.id
+                            trackList.add(id)
+                        }
+                        val adapter = RecyclerAdapter(trackList)
+                        RVAdapter.adapter = adapter
                     }
                 }
             }
 
             override fun onFailure(call: Call<Tracks?>, t: Throwable) {
-                textView.text = t.message.toString()
                 Log.e("NWissue", t.message.toString(), t)
             }
         })
