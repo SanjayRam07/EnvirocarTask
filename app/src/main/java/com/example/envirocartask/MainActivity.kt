@@ -7,14 +7,11 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.envirocar.api.ApiInterface
 import com.example.envirocar.api.MapRetrofit
 import com.example.envirocartask.map.MapModule
-import com.example.envirocartask.map.TrackTrace
 import com.example.envirocartask.models.Feature
 import com.example.envirocartask.shared.Shared
 import org.osmdroid.config.Configuration
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mapRetrofit: MapRetrofit
@@ -23,11 +20,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btn1: Button
     private lateinit var view: View
     private lateinit var mapView: MapModule
-    private lateinit var trackTrace: TrackTrace
     private lateinit var RVAdapter: RecyclerView
 
     private lateinit var tracks: Unit
-    private lateinit var features: List<Feature>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

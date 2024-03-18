@@ -25,7 +25,7 @@ import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 import retrofit2.Retrofit
 class MapRetrofit {
-    public lateinit var retrofitBuilder: ApiInterface
+    lateinit var retrofitBuilder: ApiInterface
     val padding = 0.001
     lateinit var beginTimeStamp: String
     lateinit var endTimeStamp: String
