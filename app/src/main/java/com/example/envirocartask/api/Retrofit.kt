@@ -71,10 +71,10 @@ class MapRetrofit {
         })
     }
 
-    fun getTrackTrace() {
+    fun getTrackTrace(trackId: String) {
         Log.e("inside fun2", "good")
 
-        var trackTrace = retrofitBuilder.getTrack()
+        var trackTrace = retrofitBuilder.getTrack(trackId)
         var polyline = Polyline()
         var geoPoints = ArrayList<GeoPoint>()
 

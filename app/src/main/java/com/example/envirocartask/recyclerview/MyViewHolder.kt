@@ -22,8 +22,8 @@ class RecyclerAdapter(var trackIds: List<String>): RecyclerView.Adapter<Recycler
                         val clickTime = System.currentTimeMillis()
                         if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
                             // Double click occurred, handle it here
-                            val text = textView.text.toString()
-
+                            val selectedTrack = textView.text.toString()
+                            Shared.mapRetrofit.getTrackTrace(selectedTrack)
                         }
                         lastClickTime = clickTime
                     }

@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         mapRetrofit = MapRetrofit()
         mapRetrofit.setup()
+        Shared.mapRetrofit = mapRetrofit
 
         mapView = MapModule(view)
         mapView.init()
