@@ -18,6 +18,7 @@ import retrofit2.Response
 import retrofit2.converter.gson.GsonConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
@@ -25,6 +26,9 @@ import org.osmdroid.views.overlay.Polyline
 import retrofit2.Retrofit
 class MapRetrofit {
     public lateinit var retrofitBuilder: ApiInterface
+    val padding = 0.001
+    lateinit var beginTimeStamp: String
+    lateinit var endTimeStamp: String
 
     fun setup() {
         val interceptor = HttpLoggingInterceptor().apply {
@@ -54,7 +58,11 @@ class MapRetrofit {
                 if (response.isSuccessful) {
                     val datas = response.body()!!
                     val tracks = datas.tracks
+
                     if (tracks.isNotEmpty()) {
+                        beginTimeStamp = tracks[0].begin
+                        endTimeStamp = tracks[tracks.size-1].end
+
                         for(track in tracks) {
                             val id = track.id
                             trackList.add(id)
@@ -101,9 +109,28 @@ class MapRetrofit {
                         polyline.setPoints(geoPoints)
                         polyline.width=15f
                         polyline.color=Color.RED
+                        val bounds = polyline.bounds
+                        val newBounds = BoundingBox(
+                            bounds.latNorth + padding,
+                            bounds.lonEast + padding,
+                            bounds.latSouth - padding,
+                            bounds.lonWest - padding
+                        )
+
+                        val start = geoPoints[0]
+                        val end = geoPoints[geoPoints.size-1]
+                        val startMarker = Marker(Shared.mapView)
+                        startMarker.position = start
+                        startMarker.title = beginTimeStamp
+                        Shared.mapView.overlays.add(startMarker)
+
+                        val endMarker = Marker(Shared.mapView)
+                        endMarker.position = end
+                        endMarker.title = endTimeStamp
+                        Shared.mapView.overlays.add(endMarker)
 
                         Shared.mapView.overlays.add(polyline)
-                        Shared.mapView.zoomToBoundingBox(polyline.bounds, true)
+                        Shared.mapView.zoomToBoundingBox(newBounds, true)
                     }
                 }
             }
