@@ -1,9 +1,11 @@
 package com.example.envirocartask
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +14,7 @@ import com.example.envirocartask.map.MapModule
 import com.example.envirocartask.models.Feature
 import com.example.envirocartask.shared.Shared
 import org.osmdroid.config.Configuration
+import java.security.KeyFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mapRetrofit: MapRetrofit
@@ -49,8 +52,11 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
 
         btn1.setOnClickListener {
-            val userId = textView.text.toString()
+            val userId = textView.text.toString().trim()
             tracks = mapRetrofit.getTracks(userId, RVAdapter)
+
+            val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
         }
     }
 
