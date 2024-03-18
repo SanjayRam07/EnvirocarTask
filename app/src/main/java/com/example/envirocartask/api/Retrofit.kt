@@ -11,6 +11,7 @@ import com.example.envirocartask.MainActivity
 import com.example.envirocartask.R
 import com.example.envirocartask.models.TrackPoints
 import com.example.envirocartask.recyclerview.RecyclerAdapter
+import com.example.envirocartask.shared.Shared
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -70,7 +71,7 @@ class MapRetrofit {
         })
     }
 
-    fun getTrackTrace(mapView: MapView) {
+    fun getTrackTrace() {
         Log.e("inside fun2", "good")
 
         var trackTrace = retrofitBuilder.getTrack()
@@ -101,8 +102,8 @@ class MapRetrofit {
                         polyline.width=15f
                         polyline.color=Color.RED
 
-                        mapView.overlays.add(polyline)
-                        mapView.zoomToBoundingBox(polyline.bounds, true)
+                        Shared.mapView.overlays.add(polyline)
+                        Shared.mapView.zoomToBoundingBox(polyline.bounds, true)
                     }
                 }
             }

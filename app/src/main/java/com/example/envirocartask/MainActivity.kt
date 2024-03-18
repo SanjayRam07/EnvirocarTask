@@ -12,6 +12,7 @@ import com.example.envirocar.api.MapRetrofit
 import com.example.envirocartask.map.MapModule
 import com.example.envirocartask.map.TrackTrace
 import com.example.envirocartask.models.Feature
+import com.example.envirocartask.shared.Shared
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity() {
 
         mapView = MapModule(view)
         mapView.init()
+        Shared.mapView = mapView.mMap
     }
 
     override fun onStart() {

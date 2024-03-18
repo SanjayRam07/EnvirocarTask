@@ -16,8 +16,9 @@ interface ApiInterface {
         @Header("X-Token") tokenHeader: String = "sanjay123"
     ) : Call<Tracks>
 
-    @GET("tracks/65e1d9a56549022592e528b6")
+    @GET("tracks/{trackId}")
     fun getTrack(
+        @Path("trackId") trackId: String,
         @Header("X-User") userHeader: String = "sanjaygs07",
         @Header("X-Token") tokenHeader: String = "sanjay123"
     ) : Call<TrackPoints>
